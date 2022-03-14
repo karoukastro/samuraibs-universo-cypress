@@ -1,0 +1,13 @@
+{
+  "name": "samuaribs-tests",
+  "version": "1.0.0",
+  "description": "Pojeto de testes de aceitacao de ponta a ponta em Cypress",
+  "main": "index.js",
+  "author": "Carolina Castro",
+  "license": "MIT",
+  "devDependencies": {
+    "@faker-js/faker": "^6.0.0-alpha.7",
+    "cypress": "^9.5.0",
+    "pg": "^8.7.3"
+  }
+}
