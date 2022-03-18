@@ -1,36 +1,28 @@
 import signupPage from '../support/pages/signup'
-import login from '../support/pages/login'
-import header from '../support/components/header'
+import loginPage from '../support/pages/login'
+import dashPage from '../support/pages/dashboard'
 
 describe('Login', function () {
 
     const user = {
         name: 'Carolina Castro',
         email: 'carol@testing.com',
-        password: 'Carolina1!'
+        password: 'Carolina1!',
+        is_provider: true
     }
 
     context('quando o usuario ja esta cadastrado', function () {
 
         before(function () {
-            cy.task('removeUser', user.email)
-                .then(function (result) {
-                    console.log(result)
-                })
-
-            signupPage.go()
-            signupPage.form(user)
-            signupPage.submit()
-            signupPage.toast.shouldHaveText('Agora você se tornou um(a) Samurai, faça seu login para ver seus agendamentos!')
+            cy.postUser(user)
         })
-
 
         it('Login com sucesso', function () {
 
-            login.go()
-            login.form(user)
-            login.submit()
-            header.shouldHaveText(user.name)
+            loginPage.go()
+            loginPage.form(user)
+            loginPage.submit()
+            dashPage.header.userLoggedIn(user.name)
         })
     })
 
@@ -40,10 +32,10 @@ describe('Login', function () {
 
             user.password = '123456'
 
-            login.go()
-            login.form(user)
-            login.submit()
-            login.toast.shouldHaveText('Ocorreu um erro ao fazer login, verifique suas credenciais.')
+            loginPage.go()
+            loginPage.form(user)
+            loginPage.submit()
+            loginPage.toast.shouldHaveText('Ocorreu um erro ao fazer login, verifique suas credenciais.')
         })
     })
 
@@ -53,10 +45,10 @@ describe('Login', function () {
 
             user.email = 'carol.com.br'
 
-            login.go()
-            login.form(user)
-            login.submit()
-            login.alertHaveText('Informe um email válido')
+            loginPage.go()
+            loginPage.form(user)
+            loginPage.submit()
+            loginPage.alertHaveText('Informe um email válido')
         })
     })
 
@@ -68,13 +60,13 @@ describe('Login', function () {
         ]
 
         before(function () {
-            login.go()
-            login.submit()
+            loginPage.go()
+            loginPage.submit()
         })
 
         alertMessages.forEach(function (alert) {
             it('deve exibir ' + alert.toLocaleLowerCase(), function () {
-                login.alertHaveText(alert)
+                loginPage.alertHaveText(alert)
             })
         })
     })

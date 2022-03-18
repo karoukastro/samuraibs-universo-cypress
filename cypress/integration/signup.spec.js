@@ -46,21 +46,10 @@ describe('cadastro', function () {
         }
 
         before(function () {
-            cy.task('removeUser', user.email)
-                .then(function (result) {
-                    console.log(result)
-                })
+            cy.postUser(user)
         })
 
         it('nao deve cadastrar o usuario', function () {
-
-            cy.request(
-                'POST',
-                'http://localhost:3333/users',
-                user
-            ).then(function (response) {
-                expect(response.status).to.eq(200)
-            })
 
             signupPage.go()
             signupPage.form(user)

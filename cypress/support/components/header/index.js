@@ -2,12 +2,12 @@ import { el } from './elements'
 
 class Header {
 
-    shouldHaveText(userName) {
+    userLoggedIn(userName) {
         cy.contains(el.welcomeMsg)
             .should('be.visible')
             .should('contains.text', 'Bem-vindo')
 
-        cy.get(el.userName)
+        cy.get(el.fullName, {timeout: 7000})
             .should('be.visible')
             .should('have.text', userName)
         
