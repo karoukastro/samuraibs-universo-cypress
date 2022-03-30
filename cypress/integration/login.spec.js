@@ -26,30 +26,62 @@ describe('Login', function () {
         })
     })
 
-    context('quando a senha é incorreta', function () {
+    context('quando o usuario é bom mas a senha é incorreta', function () {
 
-        it('deve exibir toast de alerta', function () {
+        let user = {
+            name: 'Celso Kamura',
+            email: 'celso@testing.com',
+            password: 'Carolina1!',
+            is_provider: true
+        }
 
-            user.password = '123456'
+        before(function () {
+            cy.postUser(user).then(function(){
+                user.password = '123456'
+            })
+        })
+
+        it('deve notificar erro de credenciais', function () {
+
 
             loginPage.go()
             loginPage.form(user)
             loginPage.submit()
-            loginPage.toast.shouldHaveText('Ocorreu um erro ao fazer login, verifique suas credenciais.')
+            const message = 'Ocorreu um erro ao fazer login, verifique suas credenciais.'
+            
+            loginPage.toast.shouldHaveText(message)
         })
     })
 
     context('quando email está no formato invalido', function () {
 
-        it('deve exibir msg de alerta', function () {
+        const emails = [
+            'carol.com.br',
+            'yahoo.com.br',
+            '@gmail.com',
+            '@',
+            'carol@',
+            '111',
+            '&*^&^&*',
+            'xpto123'
+        ]
 
-            user.email = 'carol.com.br'
-
+        before(function(){
             loginPage.go()
-            loginPage.form(user)
-            loginPage.submit()
-            loginPage.alertHaveText('Informe um email válido')
         })
+
+        emails.forEach(function(email){
+            it('nao deve logar com o email: ' + email, function () {
+
+                const user = {email: email, password: 'pwd123'}
+                
+                loginPage.form(user)
+                loginPage.submit()
+                loginPage.alert.haveText('Informe um email válido')
+            })
+        })
+
+
     })
 
     context('quando nao preencho nenhum dos campos', function () {
@@ -66,7 +98,7 @@ describe('Login', function () {
 
         alertMessages.forEach(function (alert) {
             it('deve exibir ' + alert.toLocaleLowerCase(), function () {
-                loginPage.alertHaveText(alert)
+                loginPage.alert.haveText(alert)
             })
         })
     })

@@ -2,16 +2,19 @@ import signupPage from '../support/pages/signup'
 
 describe('cadastro', function () {
 
+    before(function(){
+        cy.fixture('signup').then(function(signup){
+            this.sucess = signup.sucess
+            this.email_dup = signup.email_dup
+            this.email_inv = signup.email_inv
+            this.short_password = signup.short_password
+        })
+    })
+
     context('quando o usuario eh novato', function () {
 
-        const user = {
-            name: 'Carolina Castro',
-            email: 'carol@testing.com',
-            password: 'Carolina1!'
-        }
-
         before(function () {
-            cy.task('removeUser', user.email)
+            cy.task('removeUser', this.sucess.email)
                 .then(function (result) {
                     console.log(result)
                 })
@@ -21,7 +24,7 @@ describe('cadastro', function () {
         it('deve castrar novo usuario', function () {
 
             signupPage.go()
-            signupPage.form(user)
+            signupPage.form(this.sucess)
 
             //    cy.intercept('POST', '/users', {
             //        statusCode: 200
@@ -38,21 +41,14 @@ describe('cadastro', function () {
 
     context('quando o email ja existe', function () {
 
-        const user = {
-            name: 'Carolzinha2',
-            email: 'carolzinha@testing.com',
-            password: 'Carolina1!',
-            is_provider: true
-        }
-
         before(function () {
-            cy.postUser(user)
+            cy.postUser(this.email_dup)
         })
 
         it('nao deve cadastrar o usuario', function () {
 
             signupPage.go()
-            signupPage.form(user)
+            signupPage.form(this.email_dup)
             signupPage.submit()
             signupPage.toast.shouldHaveText('Email já cadastrado para outro usuário.')
 
@@ -63,18 +59,11 @@ describe('cadastro', function () {
 
     context('quando o email eh incorreto', function () {
 
-        const user = {
-            name: 'Elizabeth Luz',
-            email: 'liza.yahoo.com',
-            password: 'Carolina1!',
-            is_provider: true
-        }
-
         it('deve exibir msg de alerta', function () {
             signupPage.go()
-            signupPage.form(user)
+            signupPage.form(this.email_inv)
             signupPage.submit()
-            signupPage.alertHaveText('Informe um email válido')
+            signupPage.alert.haveText('Informe um email válido')
         })
     })
 
@@ -90,15 +79,16 @@ describe('cadastro', function () {
         passwords.forEach(function (p) {
 
             it('nao deve cadastrar com a senha: ' + p, function () {
-                const user = { name: 'Jason Friday', email: 'jasn@gmail.com', password: p }
 
-                signupPage.form(user)
+                this.short_password.password = p
+                
+                signupPage.form(this.short_password)
                 signupPage.submit()
             })
         })
 
         afterEach(function () {
-            signupPage.alertHaveText('Pelo menos 6 caracteres')
+            signupPage.alert.haveText('Pelo menos 6 caracteres')
         })
     })
 
@@ -117,7 +107,7 @@ describe('cadastro', function () {
 
         alertMessages.forEach(function(alert){
             it('deve exibir ' + alert.toLocaleLowerCase(), function(){
-                signupPage.alertHaveText(alert)
+                signupPage.alert.haveText(alert)
             })
         })
     })
