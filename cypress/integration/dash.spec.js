@@ -3,7 +3,7 @@ import {customer, provider, appointment} from '../support/factories/dash'
 
 describe('dashboard', function(){
 
-    context('quando o clinete faz um agendamento no app mobile', function(){
+    context('quando o cliente faz um agendamento no app mobile', function(){
 
         before(function(){
             cy.postUser(provider)
