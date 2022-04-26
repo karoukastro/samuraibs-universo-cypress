@@ -39,7 +39,7 @@ jobs:
           group: 'UI - Chrome'
           spec: cypress/integration/*
         env:
-          TZ: America/Sao_Paulo
+          TZ: America/Toronto
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           # Recommended: pass the GitHub token lets this action correctly
           # determine the unique run id necessary to re-run the checks
