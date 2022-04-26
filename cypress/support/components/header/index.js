@@ -7,7 +7,7 @@ class Header {
             .should('be.visible')
             .should('contains.text', 'Bem-vindo')
 
-        cy.get(el.fullName, {timeout: 7000})
+        cy.get(el.fullName)
             .should('be.visible')
             .should('have.text', userName)
         

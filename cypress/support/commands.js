@@ -125,7 +125,7 @@ Cypress.Commands.add('apiLogin', function (user, setLocalStorage = false) {
     }
     cy.request({
         method: 'POST',
-        url: 'http://localhost:3333/sessions',
+        url: apiServer + '/sessions',
         body: payload
     }).then(function (response) {
         expect(response.status).to.eq(200)
