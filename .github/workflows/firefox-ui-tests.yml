@@ -39,7 +39,7 @@ jobs:
           install-command: yarn install
           wait-on: 'https://samuraibs-web-carol.herokuapp.com'
           wait-on-timeout: 120
-          browser: Firefox
+          browser: firefox
           record: true
           parallel: true
           group: 'UI - Firefox'
